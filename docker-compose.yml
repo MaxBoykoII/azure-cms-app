@@ -11,3 +11,7 @@ services:
       - 5004:5000
     environment: 
       - FLASK_ENV=development
+      - SQL_SERVER=${SQL_SERVER}
+      - SQL_DATABASE=${SQL_DATABASE}
+      - SQL_USER_NAME=${SQL_USER_NAME}
+      - SQL_PASSWORD=${SQL_PASSWORD}

@@ -2,39 +2,47 @@
 # terraform plan -var-file="secrets.tfvars"
 
 provider "azurerm" {
-  version = "=2.20.0"
+  version = "=2.66.0"
   features {}
 }
 
 resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-resources"
+  name     = "${var.prefix}-rg"
   location = var.location
 }
 
-resource "azurerm_mysql_server" "database" {
-    name = var.db_name
-    location = var.location
-    resource_group_name = azurerm_resource_group.main.name
-
-    administrator_login = "mysqladmin"
-    administrator_login_password = var.password
-
-    sku_name = "B_Gen5_1"
-    storage_mb = 5120
-    version = "8.0"
-
-    auto_grow_enabled = false
-    backup_retention_days = 7
-    geo_redundant_backup_enabled = false
-    infrastructure_encryption_enabled = false
-    public_network_access_enabled = true
-    ssl_enforcement_enabled = false
+resource "azurerm_mssql_server" "database_server" {
+  name                         = var.db_server_name
+  resource_group_name          = azurerm_resource_group.main.name
+  location                     = var.location
+  version                      = "12.0"
+  administrator_login          = "missadministrator"
+  administrator_login_password = var.password
+  minimum_tls_version          = "1.2"
+  public_network_access_enabled = true
 }
 
-resource "azurerm_mysql_firewall_rule" "firewall_rule" {
-  name = "office"
-  resource_group_name = azurerm_mysql_server.database.resource_group_name
-  server_name = azurerm_mysql_server.database.name
-  start_ip_address = var.ip_address
-  end_ip_address = var.ip_address
+resource "azurerm_mssql_database" "database" {
+  name           = var.db_name
+  server_id      = azurerm_mssql_server.database_server.id
+  collation      = "SQL_Latin1_General_CP1_CI_AS"
+  license_type   = "LicenseIncluded"
+  max_size_gb    = 4
+  read_scale     = true
+  sku_name       = "BC_Gen5_2"
+  zone_redundant = false
+}
+
+resource "azurerm_mssql_firewall_rule" "firewall_rule_dev" {
+  name                = "office"
+  server_id           = azurerm_mssql_server.database_server.id
+  start_ip_address    = var.ip_address
+  end_ip_address      = var.ip_address
+}
+
+resource "azurerm_mssql_firewall_rule" "firewall_rule_azure" {
+  name                = "azure-access"
+  server_id           = azurerm_mssql_server.database_server.id
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
 }

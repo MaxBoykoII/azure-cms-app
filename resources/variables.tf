@@ -11,10 +11,17 @@ variable "location" {
     default = "West US"
 }
 
-variable "db_name" {
-    description = "The name of the MySQL database"
+variable "db_server_name" {
+    description = "The name of the SQL database server"
     type = string
-    default = "azure-cms"
+    default = "azure-cms-db-server"
+  
+}
+
+variable "db_name" {
+    description = "The name of the SQL database"
+    type = string
+    default = "azure-cms-db"
 }
 
 variable "password" {

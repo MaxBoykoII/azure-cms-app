@@ -24,6 +24,12 @@ variable "db_name" {
     default = "azure-cms-db"
 }
 
+variable "storage_name" {
+    description = "The name of the Azure storage account"
+    type = string
+    default = "cmsstorageazurexl"
+}
+
 variable "password" {
     description = "Administrator password for MySQL server"
     type = string

@@ -61,7 +61,11 @@ resource "azurerm_storage_container" "storage_container" {
   container_access_type = "container"
 }
 
-resource "azuread_application" "app-registration" {
-  display_name = "${var.prefix}-app-registration"
+resource "azuread_application" "cms_app" {
+  display_name     = "${var.prefix}-app-registration"
   sign_in_audience = "AzureADMultipleOrgs"
+}
+
+resource "azuread_application_password" "cms_app_pw" {
+  application_object_id = azuread_application.cms_app.object_id
 }

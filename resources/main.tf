@@ -60,3 +60,8 @@ resource "azurerm_storage_container" "storage_container" {
   storage_account_name  = azurerm_storage_account.storage_account.name
   container_access_type = "container"
 }
+
+resource "azuread_application" "app-registration" {
+  display_name = "${var.prefix}-app-registration"
+  sign_in_audience = "AzureADMultipleOrgs"
+}

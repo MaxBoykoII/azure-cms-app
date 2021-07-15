@@ -64,6 +64,10 @@ resource "azurerm_storage_container" "storage_container" {
 resource "azuread_application" "cms_app" {
   display_name     = "${var.prefix}-app-registration"
   sign_in_audience = "AzureADMultipleOrgs"
+
+  web {
+    redirect_uris = ["http://localhost:5004/getAToken"]
+  }
 }
 
 resource "azuread_application_password" "cms_app_pw" {

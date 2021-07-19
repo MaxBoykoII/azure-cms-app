@@ -17,9 +17,9 @@ imageSourceUrl = 'https://'+ app.config['BLOB_ACCOUNT']  + '.blob.core.windows.n
 
 @app.route('/')
 @app.route('/home')
-# @login_required
+@login_required
 def home():
-    # user = User.query.filter_by(username=current_user.username).first_or_404()
+    user = User.query.filter_by(username=current_user.username).first_or_404()
     posts = Post.query.all()
     return render_template(
         'index.html',

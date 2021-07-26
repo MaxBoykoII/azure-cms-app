@@ -66,7 +66,7 @@ resource "azuread_application" "cms_app" {
   sign_in_audience = "AzureADMultipleOrgs"
 
   web {
-    redirect_uris = ["http://localhost:5004/getAToken"]
+    redirect_uris = ["http://localhost:5004/getAToken", "https://azure-cms-app-app-service.azurewebsites.net/getAToken"]
   }
 }
 
@@ -75,9 +75,9 @@ resource "azuread_application_password" "cms_app_pw" {
 }
 
 resource "azurerm_app_service_plan" "cms_app_service_plan" {
-  name     = "${var.prefix}-app-service-plan"
+  name                = "${var.prefix}-app-service-plan"
   resource_group_name = azurerm_resource_group.main.name
-  location = var.location
+  location            = var.location
 
   sku {
     tier = "Standard"
@@ -92,14 +92,14 @@ resource "azurerm_app_service" "cms_app_service" {
   app_service_plan_id = azurerm_app_service_plan.cms_app_service_plan.id
 
   app_settings = {
-    SQL_SERVER = "${var.db_server_name}.database.windows.net"
-    SQL_DATABASE = "${var.db_name}"
-    SQL_USER_NAME = "missadministrator"
-    SQL_PASSWORD = var.password
-    BLOB_ACCOUNT = "cmsstorageazurexl"
+    SQL_SERVER       = "${var.db_server_name}.database.windows.net"
+    SQL_DATABASE     = "${var.db_name}"
+    SQL_USER_NAME    = "missadministrator"
+    SQL_PASSWORD     = var.password
+    BLOB_ACCOUNT     = "cmsstorageazurexl"
     BLOB_STORAGE_KEY = azurerm_storage_account.storage_account.primary_access_key
-    BLOB_CONTAINER ="images"
-    CLIENT_ID = azuread_application.cms_app.application_id
-    CLIENT_SECRET = azuread_application_password.cms_app_pw.value
+    BLOB_CONTAINER   = "images"
+    CLIENT_ID        = azuread_application.cms_app.application_id
+    CLIENT_SECRET    = azuread_application_password.cms_app_pw.value
   }
 }

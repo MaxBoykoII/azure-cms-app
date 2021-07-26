@@ -73,3 +73,33 @@ resource "azuread_application" "cms_app" {
 resource "azuread_application_password" "cms_app_pw" {
   application_object_id = azuread_application.cms_app.object_id
 }
+
+resource "azurerm_app_service_plan" "cms_app_service_plan" {
+  name     = "${var.prefix}-app-service-plan"
+  resource_group_name = azurerm_resource_group.main.name
+  location = var.location
+
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
+}
+
+resource "azurerm_app_service" "cms_app_service" {
+  name                = "${var.prefix}-app-service"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.main.name
+  app_service_plan_id = azurerm_app_service_plan.cms_app_service_plan.id
+
+  app_settings = {
+    SQL_SERVER = "${var.db_server_name}.database.windows.net"
+    SQL_DATABASE = "${var.db_name}"
+    SQL_USER_NAME = "missadministrator"
+    SQL_PASSWORD = var.password
+    BLOB_ACCOUNT = "cmsstorageazurexl"
+    BLOB_STORAGE_KEY = azurerm_storage_account.storage_account.primary_access_key
+    BLOB_CONTAINER ="images"
+    CLIENT_ID = azuread_application.cms_app.application_id
+    CLIENT_SECRET = azuread_application_password.cms_app_pw.value
+  }
+}

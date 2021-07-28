@@ -78,6 +78,8 @@ resource "azurerm_app_service_plan" "cms_app_service_plan" {
   name                = "${var.prefix}-app-service-plan"
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
+  kind                = "Linux"
+  reserved            = true
 
   sku {
     tier = "Standard"
@@ -101,5 +103,11 @@ resource "azurerm_app_service" "cms_app_service" {
     BLOB_CONTAINER   = "images"
     CLIENT_ID        = azuread_application.cms_app.application_id
     CLIENT_SECRET    = azuread_application_password.cms_app_pw.value
+    URL_SCHEME       = "https"
+  }
+
+  site_config {
+    linux_fx_version = "DOCKER|maxboyko/azure-cms-app:latest"
+    always_on        = true
   }
 }

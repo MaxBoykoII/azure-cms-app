@@ -92,6 +92,7 @@ resource "azurerm_app_service" "cms_app_service" {
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.cms_app_service_plan.id
+  https_only          = true
 
   app_settings = {
     SQL_SERVER       = "${var.db_server_name}.database.windows.net"

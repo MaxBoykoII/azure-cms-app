@@ -1,15 +1,12 @@
 """
-This script runs the FlaskWebProject application using a development server.
+This script runs the FlaskWebProject application using the flask cli
 """
 
 from os import environ
 from FlaskWebProject import app
+from flask.cli import FlaskGroup
+
+cli = FlaskGroup(app)
 
 if __name__ == '__main__':
-    HOST = environ.get('SERVER_HOST', '0.0.0.0')
-    try:
-        PORT = int(environ.get('PORT', '5000'))
-    except ValueError:
-        PORT = 5000
-    # app.run(HOST, PORT, ssl_context='adhoc')
-    app.run(HOST, PORT)
+    cli()

@@ -51,14 +51,14 @@ jobs:
         tf_actions_working_dir: "./resources"
        # args: '-var="password=${CMS_DB_PASSWORD}" -var="ip_address=${CMS_DB_IP}"'
       env:
-        TF_VAR_password: ${{CMS_DB_PASSWORD}}
-        TF_VAR_ip_address: ${{CMS_DB_IP}}
+        TF_VAR_password: ${{ CMS_DB_PASSWORD }}
+        TF_VAR_ip_address: ${{ CMS_DB_IP }}
  
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main'
       uses: hashicorp/terraform-github-actions@master
       with:
         tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'applya'
+        tf_actions_subcommand: 'apply'
         tf_actions_working_dir: "./terraform"
  

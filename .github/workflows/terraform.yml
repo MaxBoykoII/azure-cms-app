@@ -52,7 +52,7 @@ jobs:
        # args: '-var="password=${CMS_DB_PASSWORD}" -var="ip_address=${CMS_DB_IP}"'
       env:
         TF_VAR_password: ${CMS_DB_PASSWORD}
-        TF_VAR_ip_address: "123.166.43.422"
+        TF_VAR_ip_address: "204.120.0.15"
  
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main'

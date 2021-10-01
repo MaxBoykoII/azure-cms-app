@@ -51,7 +51,7 @@ jobs:
           tf_actions_working_dir: "./resources"
           # args: '-var="password=${CMS_DB_PASSWORD}" -var="ip_address=${CMS_DB_IP}"'
         env:
-          TF_VAR_password: ${CMS_DB_PASSWORD}
+          TF_VAR_password: "goak43333*^&^^33444"
           TF_VAR_ip_address: "204.120.0.15"
 
       - name: Terraform Apply
@@ -62,5 +62,5 @@ jobs:
           tf_actions_subcommand: "apply"
           tf_actions_working_dir: "./resources"
         env:
-          TF_VAR_password: ${CMS_DB_PASSWORD}
+          TF_VAR_password: "goak43333*^&^^33444"
           TF_VAR_ip_address: "204.120.0.15"

@@ -1,6 +1,15 @@
 # To run the Terraform config on localhost with secrets:
 # terraform plan -var-file="secrets.tfvars"
 
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "tfstates"
+    storage_account_name = "tfsamb"
+    container_name       = "tfstatedevops"
+    key                  = "tfstatedevop.tfstate"
+  }
+}
+
 provider "azurerm" {
   version = "=2.66.0"
   features {}

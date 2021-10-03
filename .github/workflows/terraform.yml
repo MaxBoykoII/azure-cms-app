@@ -76,3 +76,27 @@ jobs:
         env:
           TF_VAR_password: ${{ secrets.CMS_DB_PASSWORD }}
           TF_VAR_ip_address: ${{ secrets.CMS_DB_IP }}
+
+  seed_db:
+    name: "Seed Db"
+    runs-on: ubuntu-latest
+    environment: production
+    needs: terraform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Init Users table
+        uses: Azure/sql-action@v1
+        with:
+          server-name: azure-cms-db-server.database.windows.net
+          connection-string: ${{ secrets.CONNECTION_STRING }}
+          sql-file: "./sql_scripts/users-table-init.sql"
+
+      - name: Init Posts table
+        uses: Azure/sql-action@v1
+        with:
+          server-name: azure-cms-db-server.database.windows.net
+          connection-string: ${{ secrets.CONNECTION_STRING }}
+          sql-file: "./sql_scripts/posts-table-init.sql"

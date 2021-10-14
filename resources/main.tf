@@ -8,6 +8,13 @@ terraform {
     container_name       = "tfstatedevops"
     key                  = "tfstatedevop.tfstate"
   }
+
+  required_providers {
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "2.6.0"
+    }
+  }
 }
 
 provider "azurerm" {

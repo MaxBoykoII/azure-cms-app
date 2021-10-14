@@ -23,6 +23,9 @@ RUN ACCEPT_EULA=Y apt-get install -y --allow-unauthenticated msodbcsql17
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
+COPY ./requirements-dev.txt .
+RUN pip install -r requirements-dev.txt
+
 COPY . .
 
 CMD python application.py run -h 0.0.0.0

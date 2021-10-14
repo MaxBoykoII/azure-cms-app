@@ -12,7 +12,9 @@ jobs:
       USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,6 +34,7 @@ jobs:
         run: |
           flake8 FlaskWebProject
           black FlaskWebProject --check
+          isort --verbose
           isort FlaskWebProject --profile black --check-only
 
       - name: Set up Docker Buildx

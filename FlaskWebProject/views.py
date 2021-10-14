@@ -5,11 +5,11 @@ Routes and views for the flask application.
 import uuid
 
 import msal
+from config import Config
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
 
-from config import Config
 from FlaskWebProject import app
 from FlaskWebProject.forms import LoginForm, PostForm
 from FlaskWebProject.models import Post, User

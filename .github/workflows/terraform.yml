@@ -34,8 +34,7 @@ jobs:
         run: |
           flake8 FlaskWebProject
           black FlaskWebProject --check
-          isort --verbose
-          isort FlaskWebProject --profile black --check-only
+          isort . --src ./FlaskWebProject --profile black --check-only
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

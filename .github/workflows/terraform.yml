@@ -132,7 +132,7 @@ jobs:
 
       - name: Restart App Service
         run: |
-          az appservice web restart --resource-group azure-cms-app-rg --name azure-cms-app-app-service
+          az webapp restart --name azure-cms-app-app-service --resource-group azure-cms-app-rg
 
   seed_db:
     name: "Seed Db"

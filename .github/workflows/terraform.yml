@@ -125,6 +125,15 @@ jobs:
           TF_VAR_password: ${{ secrets.CMS_DB_PASSWORD }}
           TF_VAR_ip_address: ${{ secrets.CMS_DB_IP }}
 
+      - name: Login into Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart App Service
+        run: |
+          az appservice web restart --resource-group azure-cms-app-rg --name azure-cms-app-app-service
+
   seed_db:
     name: "Seed Db"
     runs-on: windows-latest

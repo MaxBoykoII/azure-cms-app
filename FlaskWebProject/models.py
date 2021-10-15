@@ -5,15 +5,20 @@ from datetime import datetime
 from azure.storage.blob import BlockBlobService
 from flask import flash
 from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from FlaskWebProject import app, db, login
+from config import Config
+from FlaskWebProject.login import login
 
-blob_container = app.config["BLOB_CONTAINER"]
-blob_service = BlockBlobService(
-    account_name=app.config["BLOB_ACCOUNT"], account_key=app.config["BLOB_STORAGE_KEY"]
-)
+db = SQLAlchemy()
+
+blob_container = Config.BLOB_CONTAINER
+blob_account = Config.BLOB_ACCOUNT
+blob_storage_key = Config.BLOB_STORAGE_KEY
+
+blob_service = BlockBlobService(account_name=blob_account, account_key=blob_storage_key)
 
 
 def id_generator(size=32, chars=string.ascii_uppercase + string.digits):

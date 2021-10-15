@@ -6,7 +6,7 @@ from os import environ
 
 from flask.cli import FlaskGroup
 
-from FlaskWebProject import app
+from FlaskWebProject.views import app
 
 cli = FlaskGroup(app)
 

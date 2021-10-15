@@ -3,13 +3,13 @@ import string
 from datetime import datetime
 
 from azure.storage.blob import BlockBlobService
+from config import Config
 from flask import flash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from config import Config
 from FlaskWebProject.login import login
 
 db = SQLAlchemy()

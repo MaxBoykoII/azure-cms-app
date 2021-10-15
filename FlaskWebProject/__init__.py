@@ -3,6 +3,7 @@ The flask application package.
 """
 
 from flask_session import Session
+
 from FlaskWebProject.login import login
 from FlaskWebProject.models import db
 from FlaskWebProject.views import app

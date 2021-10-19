@@ -122,8 +122,30 @@ resource "azurerm_app_service" "cms_app_service" {
     URL_SCHEME       = "https"
   }
 
+  logs {
+    application_logs {
+      file_system_level = "Verbose"
+    }
+  }
+
   site_config {
     linux_fx_version = "DOCKER|maxboyko/azure-cms-app:latest"
     always_on        = true
   }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "logs" {
+  name               = "${var.prefix}-diagnostic-logs"
+  target_resource_id = azurerm_app_service.cms_app_service.id
+  storage_account_id = azurerm_storage_account.storage_account.id
+
+  log {
+    category = "AppServiceAppLogs"
+
+    retention_policy {
+      enabled = true
+      days    = 0
+    }
+  }
+
 }

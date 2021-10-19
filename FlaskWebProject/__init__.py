@@ -2,8 +2,9 @@
 The flask application package.
 """
 
-from flask_session import Session
 from logging import StreamHandler
+
+from flask_session import Session
 
 from FlaskWebProject.login import login
 from FlaskWebProject.models import db
@@ -16,5 +17,3 @@ login.init_app(app)
 
 streamHandler = StreamHandler()
 app.logger.addHandler(streamHandler)
-
-

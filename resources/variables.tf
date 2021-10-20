@@ -39,3 +39,9 @@ variable "ip_address" {
   description = "Trusted ip address for accessing the MySQL server"
   type        = string
 }
+
+variable "app_image" {
+  description = "The image for the cms application"
+  type        = string
+  default     = "maxboyko/azure-cms-app:latest"
+}

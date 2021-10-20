@@ -21,6 +21,10 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  app_service_name = "${var.prefix}-service"
+}
+
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-rg"
   location = var.location
@@ -81,7 +85,7 @@ resource "azuread_application" "cms_app" {
   sign_in_audience = "AzureADMultipleOrgs"
 
   web {
-    redirect_uris = ["http://localhost:5004/getAToken", "https://azure-cms-app-app-service.azurewebsites.net/getAToken"]
+    redirect_uris = ["http://localhost:5004/getAToken", "https://${local.app_service_name}.azurewebsites.net/getAToken"]
   }
 }
 
@@ -90,7 +94,7 @@ resource "azuread_application_password" "cms_app_pw" {
 }
 
 resource "azurerm_app_service_plan" "cms_app_service_plan" {
-  name                = "${var.prefix}-app-service-plan"
+  name                = "${local.app_service_name}-plan"
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
   kind                = "Linux"
@@ -103,7 +107,7 @@ resource "azurerm_app_service_plan" "cms_app_service_plan" {
 }
 
 resource "azurerm_app_service" "cms_app_service" {
-  name                = "${var.prefix}-app-service"
+  name                = local.app_service_name
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.cms_app_service_plan.id
@@ -132,7 +136,7 @@ resource "azurerm_app_service" "cms_app_service" {
   }
 
   site_config {
-    linux_fx_version = "DOCKER|maxboyko/azure-cms-app:latest"
+    linux_fx_version = "DOCKER|${var.app_image}"
     always_on        = true
   }
 }

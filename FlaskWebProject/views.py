@@ -29,7 +29,7 @@ imageSourceUrl = (
 @app.route("/home")
 @login_required
 def home():
-    # user = User.query.filter_by(username=current_user.username).first_or_404()
+    User.query.filter_by(username=current_user.username).first_or_404()
     posts = Post.query.all()
     return render_template("index.html", title="Home Page", posts=posts)
 
@@ -82,17 +82,14 @@ def login():
     return render_template("login.html", title="Sign In", form=form, auth_url=auth_url)
 
 
-@app.route(
-    Config.REDIRECT_PATH
-)  # Its absolute URL must match your app's redirect_uri set in AAD
+@app.route(Config.REDIRECT_PATH)
 def authorized():
     if request.args.get("state") != session.get("state"):
-        return redirect(url_for("home"))  # No-OP. Goes back to Index page
-    if "error" in request.args:  # Authentication/Authorization failure
+        return redirect(url_for("home"))
+    if "error" in request.args:
         return render_template("auth_error.html", result=request.args)
     if request.args.get("code"):
         cache = _load_cache()
-        # TODO: Acquire a token from a built msal app, along with the appropriate redirect URI
         result = _build_msal_app(cache=cache).acquire_token_by_authorization_code(
             request.args["code"],
             scopes=Config.SCOPE,
@@ -101,8 +98,6 @@ def authorized():
         if "error" in result:
             return render_template("auth_error.html", result=result)
         session["user"] = result.get("id_token_claims")
-        # Note: In a real app, we'd use the 'name' property from session["user"] below
-        # Here, we'll use the admin username for anyone who is authenticated by MS
         user = User.query.filter_by(username="admin").first()
         login_user(user)
         _save_cache(cache)
@@ -112,10 +107,8 @@ def authorized():
 @app.route("/logout")
 def logout():
     logout_user()
-    if session.get("user"):  # Used MS Login
-        # Wipe out user and its token cache from session
+    if session.get("user"):
         session.clear()
-        # Also logout from your tenant's web session
         return redirect(
             Config.AUTHORITY
             + "/oauth2/v2.0/logout"
@@ -127,7 +120,6 @@ def logout():
 
 
 def _load_cache():
-    # TODO: Load the cache from `msal`, if it exists
     cache = msal.SerializableTokenCache()
 
     if session.get("token_cache"):
@@ -137,13 +129,11 @@ def _load_cache():
 
 
 def _save_cache(cache):
-    # TODO: Save the cache, if it has changed
     if cache.has_state_changed:
         session["token_cache"] = cache.serialize()
 
 
 def _build_msal_app(cache=None, authority=None):
-    # TODO: Return a ConfidentialClientApplication
     return msal.ConfidentialClientApplication(
         Config.CLIENT_ID,
         authority=authority or Config.AUTHORITY,
@@ -153,7 +143,6 @@ def _build_msal_app(cache=None, authority=None):
 
 
 def _build_auth_url(authority=None, scopes=None, state=None):
-    # TODO: Return the full Auth Request URL with appropriate Redirect URI
     return _build_msal_app(authority=authority).get_authorization_request_url(
         scopes or [],
         state=state or str(uuid.uuid4()),

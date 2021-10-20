@@ -9,16 +9,20 @@ This project uses Terraform for provisioning the application infrastructure and 
 ### Dependencies
 
 1. Docker
-2. Terraform
-3. A service principal for Terraform
+2. Azure cli
+3. Terraform
+4. A service principal for Terraform
 
 ### Provisioning the application infrastructure
 
-1. Copy into the ```resources``` directory.
-2. Run ```terraform init``` to download the necessary providers.
-3. Run ```terraform apply``` and enter values for the SQL server administator password, along with a trusted ip address for accessing the SQL server from a local machine.
-4. Once the infrastructure has been provisioned, you will need to seed the database. (The application assumes an administrator account exists). To do so, open the azure portal, locate the application's database, and login with the username ```missadministrator``` and the password you entered previously. Finally, navigate to the query editor and run the scripts contained in this repo's `sql_scripts` folder.
-5. In the Azure portal, navigate to the app service for the cms and inspect its configuration (under Settings). Make note of the names and values of the environment variables, which will be needed for local development.
+1. Create a resource group for the terraform backend by running `az group create` `-n` `tfstates -l westus`
+2. Create a storage account for the terraform backend by running`az storage account create -n tfsamb -g tfstates -l westus --sku Standard_LRS`
+3. Create a storage container for the terraform backend by running `az storage container create -n tfstatedevops --connection-string <connection-string>`, where ```<conection-string>``` denotes the connection string from the previous command. 
+4. Copy into the ```resources``` directory.
+5. Run ```terraform init``` to download the necessary providers.
+6. Run ```terraform apply``` and enter values for the SQL server administator password, along with a trusted ip address for accessing the SQL server from a local machine.
+7. Once the infrastructure has been provisioned, you will need to seed the database. (The application assumes an administrator account exists). To do so, open the azure portal, locate the application's database, and login with the username ```missadministrator``` and the password you entered previously. Finally, navigate to the query editor and run the scripts contained in this repo's `sql_scripts` folder.
+8. In the Azure portal, navigate to the app service for the cms and inspect its configuration (under Settings). Make note of the names and values of the environment variables, which will be needed for local development.
 
 ### Local development
 

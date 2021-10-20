@@ -135,7 +135,7 @@ jobs:
 
       - name: Restart App Service
         run: |
-          az webapp restart --name ${{ env.APP_PREFIX }}-app-service --resource-group ${{ env.APP_PREFIX }}-rg
+          az webapp restart --name ${{ env.APP_PREFIX }}-service --resource-group ${{ env.APP_PREFIX }}-rg
 
   seed_db:
     name: "Seed Db"
